@@ -31,9 +31,17 @@ public class ColorModelGeneratorWay1Test
         Assert.That(type, Is.Null);
     }
 
+    [Test]
+    public void Should_generate_an_accessor_for_a_color_model_that_uses_String_with_leading_uppercase()
+    {
+        var type = Type.GetType("colormodels.StringUpperColorModelAccessor");
+        Assert.That(type, Is.Not.Null);
+    }
+
     [ColorModels]
     public class ColorModels {
         public static string[] Empty = [];
+        public static String[] StringUpper = [];
         public static int[] Numeric = [];
         private static string[] Private = [];
         public string[] NonStatic = [];

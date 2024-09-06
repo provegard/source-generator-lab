@@ -5,17 +5,18 @@ namespace generator.tests;
 [TestFixture]
 public class ColorModelGeneratorWay2BTest
 {
-    [Test]
-    public void Should_generate_an_accessor_class_for_a_color_model()
+    [TestCase("public static string")]
+    [TestCase("public static System.String")]
+    public void Should_generate_an_accessor_class_for_a_color_model(string modifiers)
     {
         var verifier = new SyntaxVerifier<ColorModelGenerator>
         {
-            InputCode = """
-                        [generator.ColorModels]
-                        public static class ColorModels {
-                            public static string[] Empty = [];
-                        }
-                        """,
+            InputCode = $$"""
+                          [generator.ColorModels]
+                          public static class ColorModels {
+                              {{modifiers}}[] Empty = [];
+                          }
+                          """,
 
             CodeTesters =
             [

@@ -53,7 +53,7 @@ public class ColorModelGenerator : IIncrementalGenerator
                 field.Modifiers.Any(SyntaxKind.StaticKeyword) &&
                 field.Modifiers.Any(SyntaxKind.PublicKeyword) &&
                 field.Declaration.Type is ArrayTypeSyntax arrayType &&
-                arrayType.ElementType.ToString() == "string"
+                arrayType.ElementType.ToString() is "string" or "String" or "System.String"
             );
         foreach (var fieldDecl in fields) {
             foreach (var variable in fieldDecl.Declaration.Variables) {
