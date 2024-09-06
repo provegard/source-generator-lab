@@ -94,7 +94,7 @@ public class ColorModelGenerator : IIncrementalGenerator
                      context.ReportDiagnostic(diagnostic);
                  }
 
-                 sourceBuilder.AppendLine($"    public double? {ToPropertyName(color)} => null;");
+                 sourceBuilder.AppendLine($"    public double? {ToPropertyName(color)} => values.TryGetValue(\"{color}\", out var value) ? value : null;");
              }
 
              sourceBuilder.AppendLine("}");
@@ -104,7 +104,8 @@ public class ColorModelGenerator : IIncrementalGenerator
          context.AddSource("colormodels.g.cs", SourceText.From(generatedCode, Encoding.UTF8));
     }
 
-    private static string ToPropertyName(string color) => color.Substring(0, 1).ToUpperInvariant() + color.Substring(1);
+    private static string ToPropertyName(string color)
+        => color.Substring(0, 1).ToUpperInvariant() + color.Substring(1).ToLowerInvariant();
 
     private static string[] GetStrings(VariableDeclaratorSyntax variable)
      {

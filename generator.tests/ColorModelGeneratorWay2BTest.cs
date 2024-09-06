@@ -65,4 +65,40 @@ public class ColorModelGeneratorWay2BTest
 
         verifier.Run();
     }
+
+    [TestCase("red")]
+    [TestCase("RED")]
+    [TestCase("Red")]
+    public void Should_generate_a_property_for_a_color_model_component(string componentName)
+    {
+        var verifier = new SyntaxVerifier<ColorModelGenerator>
+        {
+            InputCode = $$"""
+                          [generator.ColorModels]
+                          public static class ColorModels {
+                              public static string[] Simple = ["{{componentName}}"];
+                          }
+                          """,
+
+            CodeTesters =
+            [
+                (
+                    "colormodels.g.cs",
+                    tree =>
+                    {
+                        var propertyNames = tree.GetRoot().DescendantNodes()
+                            .OfType<ClassDeclarationSyntax>()
+                            .Where(cls => cls.Identifier.Text == "SimpleColorModelAccessor")
+                            .SelectMany(cls => cls.Members)
+                            .OfType<PropertyDeclarationSyntax>()
+                            .Select(p => p.Identifier.Text)
+                            .ToList();
+                        Assert.That(propertyNames, Is.EqualTo(new[] { "Red" }));
+                    }
+                )
+            ]
+        };
+
+        verifier.Run();
+    }
 }

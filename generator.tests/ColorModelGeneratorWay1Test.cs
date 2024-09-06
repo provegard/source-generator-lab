@@ -48,6 +48,17 @@ public class ColorModelGeneratorWay1Test
         Assert.That(value, Is.Null);
     }
 
+    [Test]
+    public void Should_return_the_value_from_a_color_model_component_property()
+    {
+        dynamic accessor = new SimpleColorModelAccessor(new Dictionary<string, double>
+        {
+            ["red"] = 0.5
+        });
+        object value = accessor.Red;
+        Assert.That(value, Is.EqualTo(0.5d));
+    }
+
     [ColorModels]
     public class ColorModels {
         public static string[] Empty = [];

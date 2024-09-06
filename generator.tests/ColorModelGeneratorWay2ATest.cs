@@ -65,4 +65,37 @@ public class ColorModelGeneratorWay2ATest
 
         verifier.Run();
     }
+
+    [Test]
+    public void Should_generate_a_property_for_a_color_model_component()
+    {
+        var verifier = new TextVerifier<ColorModelGenerator>
+        {
+            InputCode = """
+                        [generator.ColorModels]
+                        public static class ColorModels {
+                            public static string[] Simple = ["red"];
+                        }
+                        """,
+
+            ExpectedCode =
+            [
+                (
+                    "colormodels.g.cs",
+                    """
+                    #nullable enable
+                    using System;
+                    using System.Collections.Generic;
+
+                    namespace colormodels;
+
+                    public class SimpleColorModelAccessor(IDictionary<string, double> values) {
+                        public double? Red => values.TryGetValue("red", out var value) ? value : null;
+                    }                                          
+                    """)
+            ]
+        };
+
+        verifier.Run();
+    }
 }
