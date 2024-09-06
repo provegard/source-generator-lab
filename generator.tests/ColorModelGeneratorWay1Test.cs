@@ -1,4 +1,6 @@
-﻿namespace generator.tests;
+﻿using colormodels;
+
+namespace generator.tests;
 
 [TestFixture]
 public class ColorModelGeneratorWay1Test
@@ -38,6 +40,14 @@ public class ColorModelGeneratorWay1Test
         Assert.That(type, Is.Not.Null);
     }
 
+    [Test]
+    public void Should_generate_a_property_for_a_color_model_component()
+    {
+        dynamic accessor = new SimpleColorModelAccessor(new Dictionary<string, double>());
+        object value = accessor.Red;
+        Assert.That(value, Is.Null);
+    }
+
     [ColorModels]
     public class ColorModels {
         public static string[] Empty = [];
@@ -45,5 +55,6 @@ public class ColorModelGeneratorWay1Test
         public static int[] Numeric = [];
         private static string[] Private = [];
         public string[] NonStatic = [];
+        public static string[] Simple = ["red"];
     }
 }
