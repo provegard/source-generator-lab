@@ -108,17 +108,17 @@ public class ColorModelGenerator : IIncrementalGenerator
         => color.Substring(0, 1).ToUpperInvariant() + color.Substring(1).ToLowerInvariant();
 
     private static string[] GetStrings(VariableDeclaratorSyntax variable)
-     {
-         var initializerValue = variable.Initializer?.Value;
-         if (initializerValue is CollectionExpressionSyntax collection)
-         {
-             return collection.Elements.SelectMany(elem =>
-                 elem is ExpressionElementSyntax { Expression: LiteralExpressionSyntax literal }
-                     ? [literal.Token.ValueText]
-                     : Array.Empty<string>()
-             ).ToArray();
-         }
+    {
+        var initializerValue = variable.Initializer?.Value;
+        if (initializerValue is CollectionExpressionSyntax collection)
+        {
+            return collection.Elements.SelectMany(elem =>
+                elem is ExpressionElementSyntax { Expression: LiteralExpressionSyntax literal }
+                    ? [literal.Token.ValueText]
+                    : Array.Empty<string>()
+            ).ToArray();
+        }
 
-         return [];
-     }
+        return [];
+    }
 }
