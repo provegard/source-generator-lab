@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -46,7 +47,14 @@ public class ColorModelGenerator : IIncrementalGenerator
     private static IEnumerable<VariableDeclaratorSyntax> GetVariables(GeneratorAttributeSyntaxContext context) {
         if (context.TargetNode is not ClassDeclarationSyntax classDeclarationSyntax) yield break;
 
-        var fields = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>();
+        var fields = classDeclarationSyntax.Members
+            .OfType<FieldDeclarationSyntax>()
+            .Where(field =>
+                field.Modifiers.Any(SyntaxKind.StaticKeyword) &&
+                field.Modifiers.Any(SyntaxKind.PublicKeyword) &&
+                field.Declaration.Type is ArrayTypeSyntax arrayType &&
+                arrayType.ElementType.ToString() == "string"
+            );
         foreach (var fieldDecl in fields) {
             foreach (var variable in fieldDecl.Declaration.Variables) {
                 yield return variable;
